@@ -1,20 +1,15 @@
 
-document.addEventListener("DOMContentLoaded", init);
-
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min) + min);
-}
 
 
-async function init() {
-
+async function init(continente) {
     try {
-        const res = await fetch('https://restcountries.com/v3.1/all');
+
+        const res = await fetch('https://restcountries.com/v3.1/region/' + continente);
         const data = await res.json();
 
-        for (let i = 0; i <= 9; i++) {
-            let aleatorio = getRandomInt(0, data.length);
-            pintarCard(data[aleatorio]);
+        document.getElementById("botones").innerHTML="<h3>"+continente.toUpperCase()+"</h3>";
+        for (let i = 0; i <= data.length; i++) {
+            pintarCard(data[i]);
         }
 
     }
@@ -28,7 +23,7 @@ async function init() {
 
 
 function pintarCard(pais) {
-    const flex = document.querySelector('.flex');
+    const flex = document.querySelector('#aqui');
     const template = document.querySelector('#template-card').content;
     const clone = template.cloneNode(true);
     const fragment = document.createDocumentFragment();
@@ -36,23 +31,24 @@ function pintarCard(pais) {
 
 
 
-    clone.querySelector(".card-body-img").setAttribute("src", pais.flags.png);
+    clone.querySelector(".img-fluid").setAttribute("src", pais.flags.svg);
 
     clone.querySelector(".card-body-title").innerHTML = pais.translations.spa.common;
 
-    clone.querySelector(".card-body-text").textContent = "Continente: " + pais.continents;
+    clone.querySelectorAll(".col-4 h4")[0].textContent = pais.capital;
 
-    clone.querySelectorAll(".card-footer-social h3")[0].textContent=pais.capital;
+    clone.querySelectorAll(".col-4 h4")[1].textContent = pais.timezones[0];
 
-    clone.querySelectorAll(".card-footer-social h3")[1].textContent=pais.timezones[0];
-
-    clone.querySelectorAll(".card-footer-social h3")[2].textContent=pais.population;
+    clone.querySelectorAll(".col-4 h4")[2].textContent = pais.population;
 
     fragment.appendChild(clone)
     flex.appendChild(fragment)
 }
 
 
+function limpiar() {
+    console.log(target.firstChild);
+}
 
 
 
